@@ -1,12 +1,13 @@
 # Human Performance Simulation Lab
 
-A web-based human-factors research prototype for studying how cognitive load, distraction, task switching, working memory, and interference affect task performance in simulated healthcare-training scenarios.
+A web-based human-factors research platform for studying how cognitive load,
+distraction, task switching, working memory, interference, and interface
+interaction patterns affect task performance.
 
 ## Project Status
 
 ### Phase 1 — MVP ✅
 - Timed tasks
-- Difficulty levels
 - Accuracy tracking
 - Response-time measurement
 - Cognitive-load self-rating
@@ -14,33 +15,60 @@ A web-based human-factors research prototype for studying how cognitive load, di
 - Analytics dashboard
 
 ### Phase 2 — Human Factors ✅
-- Stroop-style interference tasks
+- Stroop-style interference
 - Working-memory trials
 - Simulated distraction events
 - Task-switch trials
-- Trial-level human-factors telemetry
 
 ### Phase 3 — Research Layer ✅
-- Participant consent flow
+- Consent workflow
 - Anonymous participant IDs
-- Randomized experimental conditions
-- Condition-level research analysis
-- Cohen's d effect-size calculations
-- Anonymized CSV export
+- Randomized conditions
+- Effect-size calculations
+- Research CSV export
 - Research-method documentation
 
-## Research Question
+### Phase 4 — Web Research Platform ✅
+- Interaction-event telemetry
+- Element-level click-frequency heatmap
+- Session replay
+- Keyboard-only response task
+- Accessibility/usability audit
+- Research administrator dashboard
+- Repeated-measures summaries
+- Optional FastAPI research API
 
-> How do distraction, task switching, working-memory demands, and interference affect accuracy, response time, and perceived cognitive load during simulated healthcare-training tasks?
+## Architecture
 
-## Tech Stack
+```text
+Participant
+   |
+   v
+Streamlit Research UI
+   |
+   +--> Experiment Engine
+   |      +-- Medication Match
+   |      +-- Stroop
+   |      +-- Working Memory
+   |      +-- Keyboard Response
+   |
+   +--> Interaction Telemetry
+   |
+   +--> Accessibility Audit
+   |
+   v
+SQLite Research Database
+   |
+   +--> Analytics Dashboard
+   +--> Session Replay
+   +--> Admin View
+   +--> CSV Export
+   |
+   v
+Optional FastAPI Research API
+```
 
-- Python
-- Streamlit
-- SQLite
-- Pandas
-
-## Run Locally
+## Run the Streamlit App
 
 ```bash
 python3 -m venv .venv
@@ -49,29 +77,62 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Experimental Conditions
+Windows:
 
-Participants are randomly assigned to Control, Moderate Load, or High Load conditions. Conditions vary the probability of distractions, Stroop interference, working-memory demands, and task switching.
+```bash
+.venv\Scripts\activate
+```
 
-## Recorded Variables
+## Run the Optional FastAPI Backend
 
-- anonymous participant ID
-- experimental condition
-- task type
-- difficulty
-- correctness
-- response time
-- cognitive-load rating
-- distraction presence
-- task-switch indicator
-- timestamp
+In a second terminal:
+
+```bash
+source .venv/bin/activate
+uvicorn research_api:app --reload --port 8000
+```
+
+Then visit the interactive API documentation at:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Research Variables
+
+### Independent variables
+- Experimental condition
+- Distraction presence
+- Task-switch status
+- Task type
+- Difficulty
+
+### Dependent variables
+- Accuracy
+- Response time
+- Cognitive-load rating
+- Interaction frequency
+- Accessibility audit score
+
+## Interaction Heatmap
+
+Phase 4 uses an **element-level click-frequency heatmap** rather than storing raw
+screen coordinates. This is simpler, more privacy-preserving, and still useful
+for identifying which UI targets receive the most interaction.
 
 ## Portfolio Description
 
-**Human Performance Simulation Lab — Python, Streamlit, SQLite**
+**Human Performance Simulation Lab — Python, Streamlit, FastAPI, SQLite**
 
-Developed a human-factors research platform that measures accuracy, response time, cognitive load, and task-switching performance under randomized experimental conditions. Implemented Stroop-style interference, working-memory tasks, distraction trials, anonymized participant tracking, persistent telemetry, effect-size analysis, and research-data export.
+Developed a human-factors research platform for studying cognitive load,
+attention, working memory, task switching, and interaction behavior under
+randomized experimental conditions. Built trial-level telemetry, session replay,
+UI interaction heatmaps, keyboard-accessibility testing, anonymized participant
+tracking, repeated-measures analysis, effect-size calculations, and an optional
+FastAPI backend for multi-user research data access.
 
 ## Disclaimer
 
-This project is a student research and usability prototype. It is not a medical device, validated cognitive assessment, clinical decision-support system, or IRB-approved clinical study.
+This is a student research and usability prototype. It is not a medical device,
+validated cognitive assessment, clinical decision-support tool, or IRB-approved
+clinical study.
