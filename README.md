@@ -10,7 +10,7 @@ healthcare-training tasks.
 Add your Streamlit URL here after deployment:
 
 ```text
-https://YOUR-APP.streamlit.app
+https://cognitive-load-training-simulator.streamlit.app/
 ```
 
 ## Phase 5 Engineering Upgrade
