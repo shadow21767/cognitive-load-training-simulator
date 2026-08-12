@@ -7,8 +7,6 @@ healthcare-training tasks.
 
 ## Live Demo
 
-Add your Streamlit URL here after deployment:
-
 ```text
 https://cognitive-load-training-simulator.streamlit.app/
 ```
