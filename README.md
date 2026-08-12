@@ -1,629 +1,321 @@
 # 🧠 Human Performance Simulation Lab
 
-A web-based **human-factors research platform** for studying how cognitive load, distraction, task switching, working memory, interference, and interface interaction patterns affect human performance in simulated healthcare-training tasks.
+A production-style, web-based human-factors research platform for studying how
+cognitive load, distraction, task switching, working memory, interference,
+accessibility, and interaction behavior affect performance in simulated
+healthcare-training tasks.
 
-> Built as a student research prototype inspired by healthcare simulation, usability research, cognitive science, and human-computer interaction.
+## Live Demo
 
----
-
-## 🚀 Live Demo
-
-**[Try the Human Performance Simulation Lab](https://cognitive-load-training-simulator.streamlit.app)**
-
-No installation required.
-
-> Replace `YOUR_STREAMLIT_APP_URL` with your deployed Streamlit Community Cloud URL.
-
-### Recommended Demo Flow
-
-1. Open **Study Setup**
-2. Accept the research-prototype consent
-3. Create an anonymous participant session
-4. Open **Experiment**
-5. Complete the 8 experimental trials
-6. Review results in **Analytics**
-7. Explore **Interaction Telemetry**
-8. Review the **Session Replay**
-9. Complete the **Accessibility Audit**
-10. Explore the **Admin View**
-
----
-
-## 🎯 Project Goal
-
-The goal of this project is to explore how software can be used to study **human performance and usability** in simulation-based training environments.
-
-The platform measures:
-
-- Accuracy
-- Response time
-- Cognitive-load ratings
-- Task-switching performance
-- Distraction effects
-- Working-memory performance
-- Interaction frequency
-- Accessibility and usability indicators
-
-The project focuses on the intersection of:
-
-**Software Engineering · Healthcare Simulation · Human Factors · Cognitive Science · HCI · Research Analytics**
-
----
-
-## 🔬 Research Question
-
-> **How do distraction, task switching, working-memory demands, interference, and interface interaction patterns affect accuracy, response time, and perceived cognitive load during simulated healthcare-training tasks?**
-
----
-
-# ✨ Features
-
-## Phase 1 — MVP ✅
-
-The first version established the experimental foundation.
-
-- Timed simulation tasks
-- Adjustable difficulty levels
-- Accuracy measurement
-- Response-time tracking
-- Cognitive-load self-rating
-- SQLite data persistence
-- Research analytics dashboard
-- CSV data export
-
----
-
-## Phase 2 — Human Factors ✅
-
-The second phase introduced cognitive-science and human-factors concepts.
-
-### Stroop-Style Interference
-
-Participants must respond to conflicting information designed to simulate attention interference.
-
-### Working Memory
-
-Participants are asked to retain information while completing other tasks.
-
-### Simulated Distractions
-
-Trials may include notification-style alerts that participants must ignore while completing the primary task.
-
-### Task Switching
-
-Certain trials require users to adapt to a changed response rule.
-
-### Human-Factors Telemetry
-
-Each trial records:
-
-- Task type
-- Difficulty
-- Correctness
-- Response time
-- Cognitive-load rating
-- Distraction status
-- Task-switch status
-
----
-
-## Phase 3 — Research Layer ✅
-
-Phase 3 transformed the application from a simple simulator into a structured research prototype.
-
-### Anonymous Participant IDs
-
-Participants receive randomly generated identifiers such as:
+Add your Streamlit URL here after deployment:
 
 ```text
-P-A82F194C
+https://YOUR-APP.streamlit.app
 ```
 
-No name or email address is required.
+## Phase 5 Engineering Upgrade
 
-### Consent Workflow
+The platform now includes:
 
-Participants must acknowledge that the application is a student research prototype before beginning.
+- PostgreSQL-ready persistence with SQLAlchemy
+- SQLite fallback for local development
+- Docker and Docker Compose
+- Automated pytest coverage
+- GitHub Actions CI
+- Researcher login
+- YAML-configurable study protocols
+- Multi-user-safe participant and session IDs
+- Browser telemetry ingestion through FastAPI
+- Embedded browser-event telemetry component
+- Eye-tracking data ingestion/analysis adapter
+- Advanced statistical analysis
+- FastAPI research API
 
-### Randomized Experimental Conditions
-
-Participants are assigned to one of three conditions:
-
-- **Control**
-- **Moderate Load**
-- **High Load**
-
-Each condition changes the probability of:
-
-- distractions
-- task switching
-- working-memory requirements
-- interference tasks
-
-### Research Analytics
-
-The platform includes:
-
-- descriptive statistics
-- condition comparisons
-- participant-level summaries
-- Cohen's d effect-size calculations
-- Welch t statistics
-- CSV research-data export
-
----
-
-## Phase 4 — Web Research Platform ✅
-
-Phase 4 adds research-platform and usability-engineering capabilities.
-
-### Interaction Telemetry
-
-The platform records high-level interaction events including:
-
-- experiment start
-- trial submission
-- task type
-- interface target
-- session ID
-- participant ID
-- response timing
-
-### Interaction Heatmap
-
-The application produces an **element-level click-frequency heatmap** showing which interface controls receive the most interaction.
-
-Example:
+## Architecture
 
 ```text
-submit_trial         █████████████
-begin_experiment     █████
-Medication Match     ███████████
-Stroop Interference  ███████
-Keyboard Response    ████
+Participants
+    |
+    v
+Streamlit Research UI
+    |
+    +---- Experiment Engine
+    +---- Accessibility Audit
+    +---- Browser Telemetry Component
+    +---- Eye-Tracking Data Import
+    |
+    v
+SQLAlchemy Persistence Layer
+    |
+    +---- SQLite (local)
+    |
+    +---- PostgreSQL (Docker / deployment)
+    |
+    v
+Analytics + Admin Dashboard
+    |
+    +---- FastAPI Research API
+    +---- CSV Export
+    +---- Statistical Analysis
 ```
 
-The system intentionally avoids storing raw mouse coordinates.
-
-### Session Replay
-
-Researchers can reconstruct the interaction sequence for an experimental session.
-
-Example:
-
-```text
-Session Created
-      ↓
-Experiment Started
-      ↓
-Medication Match Response
-      ↓
-Trial Submitted
-      ↓
-Stroop Response
-      ↓
-Task Switch
-      ↓
-Experiment Completed
-```
-
-### Keyboard Accessibility Task
-
-One experimental trial requires keyboard-only interaction to evaluate alternate input methods.
-
-### Accessibility Audit
-
-The platform includes a lightweight usability and accessibility evaluation covering:
-
-- keyboard navigation
-- readable labels
-- clear system feedback
-- unnecessary visual clutter
-- adequate response time
-
-### Research Administrator View
-
-Researchers can inspect:
-
-- participants
-- experimental trials
-- interaction events
-- accessibility audits
-
----
-
-# 🏗️ Architecture
-
-```text
-                      Participant
-                           │
-                           ▼
-                Streamlit Research UI
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-  Experiment Engine   Interaction       Accessibility
-                     Telemetry             Audit
-          │                │                │
-          └────────────────┼────────────────┘
-                           ▼
-                    SQLite Database
-                           │
-            ┌──────────────┼───────────────┐
-            │              │               │
-            ▼              ▼               ▼
-        Analytics     Session Replay     Admin View
-            │
-            ▼
-       CSV Data Export
-            │
-            ▼
-      Optional FastAPI API
-```
-
----
-
-# 🧪 Experimental Tasks
-
-The experiment currently includes several task types.
-
-## Medication Matching
-
-Participants identify the correct simulated medication label from increasingly similar choices.
-
-Measured variables:
-
-- accuracy
-- response time
-- difficulty
-- cognitive load
-
----
-
-## Stroop Interference
-
-Participants respond to conflicting visual/verbal information.
-
-Purpose:
-
-- attention testing
-- interference measurement
-- cognitive-control analysis
-
----
-
-## Working Memory
-
-Participants retain a number while completing another task and later recall it.
-
-Purpose:
-
-- memory-load measurement
-- divided-attention testing
-
----
-
-## Task Switching
-
-Participants receive a changed response rule during selected trials.
-
-Purpose:
-
-- cognitive flexibility
-- switch-cost measurement
-- error analysis
-
----
-
-## Keyboard Response
-
-Participants complete a task using keyboard input instead of mouse interaction.
-
-Purpose:
-
-- accessibility testing
-- alternative interaction analysis
-
----
-
-# 📊 Research Variables
-
-## Independent Variables
-
-- Experimental condition
-- Difficulty level
-- Distraction presence
-- Task-switch status
-- Task type
-
-## Dependent Variables
-
-- Accuracy
-- Response time
-- Cognitive-load rating
-- Error frequency
-- Interaction frequency
-- Accessibility audit score
-
----
-
-# 📈 Analytics
-
-The research dashboard supports analysis of:
-
-- overall accuracy
-- average response time
-- average cognitive load
-- performance by condition
-- performance by task type
-- distraction effects
-- task-switching effects
-- participant-level summaries
-
-The project also includes basic effect-size and group-comparison calculations.
-
----
-
-# 🗄️ Data Model
-
-The platform stores several types of research data.
-
-## Participants
-
-```text
-participant_id
-created_at
-consented
-notes
-```
-
-## Experimental Trials
-
-```text
-session_id
-participant_id
-condition_name
-difficulty
-task_number
-task_type
-expected_answer
-selected_answer
-correct
-response_time
-cognitive_load
-distraction_present
-switch_trial
-created_at
-```
-
-## Interaction Events
-
-```text
-session_id
-participant_id
-event_type
-target
-page
-task_number
-value
-elapsed_ms
-created_at
-```
-
-## Accessibility Audits
-
-```text
-participant_id
-session_id
-keyboard_navigation
-readable_labels
-clear_feedback
-low_distraction
-adequate_time
-score
-created_at
-```
-
----
-
-# 💻 Tech Stack
-
-### Application
-
-- Python
-- Streamlit
-
-### Backend / API
-
-- FastAPI
-- Pydantic
-
-### Data
-
-- SQLite
-- Pandas
-
-### Research Analytics
-
-- Descriptive statistics
-- Cohen's d
-- Welch t statistic
-- Repeated-measures summaries
-
----
-
-# ▶️ Run Locally
-
-Clone the repository:
-
-```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
-```
-
-Create a virtual environment:
+## Run Locally
 
 ```bash
 python3 -m venv .venv
-```
-
-Activate it on macOS/Linux:
-
-```bash
 source .venv/bin/activate
-```
-
-Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Install dependencies:
-
-```bash
 pip install -r requirements.txt
-```
-
-Start the Streamlit application:
-
-```bash
 streamlit run app.py
 ```
 
-Open:
-
-```text
-http://localhost:8501
-```
-
----
-
-# 🔌 Optional FastAPI Backend
-
-The project also includes an optional research API.
-
-Start it with:
+In a second terminal:
 
 ```bash
+source .venv/bin/activate
 uvicorn research_api:app --reload --port 8000
 ```
 
-Then open the interactive API documentation:
+## Run with Docker + PostgreSQL
 
-```text
-http://127.0.0.1:8000/docs
+```bash
+docker compose up --build
 ```
 
-Example API endpoints include:
+Then open:
 
 ```text
-GET  /health
-GET  /participants
-GET  /sessions
-GET  /events
-POST /events
-GET  /analytics/summary
+Streamlit: http://localhost:8501
+FastAPI:   http://localhost:8000/docs
 ```
 
----
+The Docker stack runs:
 
-# ☁️ Public Deployment
+- Streamlit app
+- FastAPI service
+- PostgreSQL database
 
-The Streamlit application can be deployed using **Streamlit Community Cloud**.
+## Researcher Authentication
 
-Typical deployment configuration:
+For local development the defaults are:
 
 ```text
-Repository:
-shadow21767/cognitive-load-training-simulator
-
-Branch:
-main
-
-Main file:
-app.py
+Username: admin
+Password: change-me
 ```
 
-After deployment, replace the placeholder in the **Live Demo** section with your public application URL.
+Change them before deployment using environment variables:
 
----
+```bash
+export RESEARCHER_USERNAME="your-user"
+export RESEARCHER_PASSWORD="your-strong-password"
+```
 
-# 📁 Project Structure
+Never commit production credentials.
+
+## Configurable Study Protocols
+
+The active experiment is defined in:
 
 ```text
-human-performance-simulation-lab/
-│
+config/default_study.yaml
+```
+
+You can modify:
+
+- study metadata
+- number of tasks
+- condition probabilities
+- distraction probability
+- task-switch probability
+- Stroop probability
+- working-memory behavior
+
+without modifying the experiment engine.
+
+## Browser Telemetry
+
+The FastAPI endpoint accepts browser-native events including:
+
+- visibility changes
+- viewport changes
+- sampled pointer coordinates
+- custom interaction events
+
+The included Streamlit component demonstrates telemetry inside its own sandboxed
+iframe.
+
+Full capture of arbitrary Streamlit DOM events would require a dedicated
+Streamlit custom component.
+
+## Eye-Tracking Integration
+
+The project includes a vendor-neutral gaze-data adapter.
+
+Supported input schema:
+
+```text
+timestamp_ms
+x_norm
+y_norm
+confidence (optional)
+source (optional)
+```
+
+This allows normalized gaze exports from systems such as:
+
+- WebGazer
+- Tobii
+- Pupil Labs
+- other eye-tracking systems
+
+The application validates gaze samples and creates a fixation-density grid.
+
+Automatic webcam capture is intentionally not enabled by default.
+
+## Advanced Statistics
+
+The analytics layer includes:
+
+- descriptive statistics
+- Cohen's d
+- Welch's t-test
+- one-way ANOVA
+- bootstrap 95% confidence intervals
+- repeated-measures participant summaries
+- correlation matrices
+
+These are exploratory analyses and should not be treated as clinical validation.
+
+## Testing
+
+Run:
+
+```bash
+pytest -q
+```
+
+Lint:
+
+```bash
+ruff check .
+```
+
+## GitHub Actions
+
+Every push to `main` runs:
+
+1. dependency installation
+2. Ruff linting
+3. pytest
+4. Python compilation validation
+
+Workflow:
+
+```text
+.github/workflows/ci.yml
+```
+
+
+## CI/CD
+
+Two GitHub Actions workflows are included.
+
+### Continuous Integration
+
+`.github/workflows/ci.yml` runs on pushes and pull requests:
+
+- Ruff linting
+- pytest
+- Python compilation validation
+
+### Container Delivery
+
+`.github/workflows/docker-publish.yml` builds and publishes two container images
+to GitHub Container Registry whenever `main` is updated:
+
+- `human-performance-app`
+- `human-performance-api`
+
+It also publishes version-tagged images when you push Git tags such as `v1.0.0`.
+
+This gives the repository a repeatable deployment artifact instead of relying on
+a developer's local environment.
+
+## Project Structure
+
+```text
+.
 ├── app.py
-├── db.py
-├── stats_utils.py
+├── auth.py
+├── config.py
+├── eye_tracking.py
+├── models.py
+├── repository.py
 ├── research_api.py
+├── stats_utils.py
+├── task_engine.py
+├── config/
+│   └── default_study.yaml
+├── telemetry/
+│   └── browser_telemetry.html
+├── sample_data/
+│   └── gaze_sample.csv
+├── tests/
+│   ├── test_config.py
+│   ├── test_eye_tracking.py
+│   └── test_stats.py
+├── .github/workflows/
+│   ├── ci.yml
+│   └── docker-publish.yml
+├── Dockerfile
+├── Dockerfile.api
+├── docker-compose.yml
 ├── requirements.txt
-├── README.md
-├── PROJECT_PLAN.md
-└── .gitignore
+├── requirements-dev.txt
+├── .env.example
+└── README.md
 ```
 
----
+## Deployment Notes
 
-# 🛣️ Development Roadmap
+### Streamlit Community Cloud
 
-## Completed
+The Streamlit UI can run on Community Cloud, but PostgreSQL should be hosted
+externally if you want persistent multi-user data.
 
-- [x] Phase 1 — MVP
-- [x] Phase 2 — Human Factors
-- [x] Phase 3 — Research Layer
-- [x] Phase 4 — Web Research Platform
+Configure:
 
-## Future Engineering Improvements
+```text
+DATABASE_URL
+RESEARCHER_USERNAME
+RESEARCHER_PASSWORD
+API_BASE_URL
+```
 
-- [ ] PostgreSQL backend
-- [ ] Docker containerization
-- [ ] Automated unit tests
-- [ ] GitHub Actions CI/CD
-- [ ] Researcher authentication
-- [ ] Configurable experiments
-- [ ] Multi-user deployments
-- [ ] Browser-native interaction telemetry
-- [ ] Eye-tracking integration
-- [ ] Advanced statistical analysis
+as deployment secrets/environment variables.
 
----
+### Production database
 
-# 💼 Portfolio Summary
+Use a managed PostgreSQL service rather than the SQLite fallback for persistent
+multi-user research data.
 
-**Human Performance Simulation Lab — Python, Streamlit, FastAPI, SQLite**
+## Privacy
 
-Developed a human-factors research platform for studying cognitive load, attention, working memory, task switching, and interaction behavior under randomized experimental conditions. Implemented trial-level telemetry, session replay, UI interaction heatmaps, keyboard-accessibility testing, anonymized participant tracking, repeated-measures analysis, effect-size calculations, research dashboards, and an optional FastAPI backend.
+The project uses anonymous participant IDs and does not require names or email
+addresses.
 
----
+Browser and gaze telemetry should only be collected with explicit participant
+consent and an appropriate approved research protocol when used beyond a
+student/demo context.
 
-# ⚠️ Research Disclaimer
+## Disclaimer
 
-This application is a **student research and usability prototype**.
+This is a student research and usability prototype.
 
-It is **not**:
+It is not:
 
 - a medical device
-- a clinical decision-support system
 - a validated cognitive assessment
+- a clinical decision-support tool
 - a validated medical training platform
 - an IRB-approved clinical study
-
-The software should not be used to make clinical or diagnostic decisions.
-
----
-
-## 📌 Project Motivation
-
-This project explores how emerging software technologies can support research in:
-
-- healthcare simulation
-- human factors
-- cognitive science
-- usability engineering
-- human-computer interaction
-- training-system design
-
-The long-term goal is to better understand how interface design and cognitive workload can influence human performance during simulation-based training.

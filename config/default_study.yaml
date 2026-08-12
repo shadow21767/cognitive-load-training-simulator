@@ -1,0 +1,35 @@
+study:
+  id: healthcare-cognitive-load-v1
+  name: Healthcare Cognitive Load Study
+  version: 1
+  total_tasks: 8
+  description: >
+    Human-factors pilot studying distraction, task switching, working memory,
+    interference, and interaction behavior in simulated healthcare-training tasks.
+
+conditions:
+  Control:
+    distraction_probability: 0.10
+    stroop_probability: 0.15
+    switch_probability: 0.10
+    memory_load: false
+  Moderate Load:
+    distraction_probability: 0.40
+    stroop_probability: 0.35
+    switch_probability: 0.30
+    memory_load: true
+  High Load:
+    distraction_probability: 0.75
+    stroop_probability: 0.55
+    switch_probability: 0.55
+    memory_load: true
+
+tasks:
+  medication_match:
+    enabled: true
+  stroop:
+    enabled: true
+  working_memory:
+    enabled: true
+  keyboard_response:
+    enabled: true

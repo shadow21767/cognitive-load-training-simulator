@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: sans-serif; font-size: 13px; margin: 0; padding: 8px; }
+    .box { border: 1px solid #ccc; border-radius: 8px; padding: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <strong>Browser telemetry active</strong>
+  <div id="status">Initializing…</div>
+</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const api = params.get("api") || "http://localhost:8000";
+const sessionId = params.get("session") || "unknown";
+const participantId = params.get("participant") || "unknown";
+const status = document.getElementById("status");
+
+async function send(eventType, target, xNorm=null, yNorm=null, value=null) {
+  try {
+    await fetch(api + "/events", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        session_id: sessionId,
+        participant_id: participantId,
+        event_type: eventType,
+        target: target,
+        page: "Browser Telemetry",
+        value: value,
+        x_norm: xNorm,
+        y_norm: yNorm
+      })
+    });
+    status.textContent = "Connected";
+  } catch (e) {
+    status.textContent = "API unavailable";
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  send("visibility", document.visibilityState);
+});
+
+window.addEventListener("resize", () => {
+  send("viewport", "resize", null, null, window.innerWidth + "x" + window.innerHeight);
+});
+
+let lastMove = 0;
+document.addEventListener("pointermove", (e) => {
+  const now = Date.now();
+  if (now - lastMove < 1000) return;
+  lastMove = now;
+  send("pointer_sample", "telemetry_panel", e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+});
+
+send("browser", "telemetry_loaded", null, null, navigator.userAgent);
+</script>
+</body>
+</html>

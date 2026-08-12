@@ -1,0 +1,6 @@
+timestamp_ms,x_norm,y_norm,confidence,source
+0,0.42,0.31,0.94,webgazer
+100,0.43,0.32,0.92,webgazer
+200,0.47,0.34,0.89,webgazer
+300,0.72,0.65,0.91,webgazer
+400,0.70,0.62,0.93,webgazer

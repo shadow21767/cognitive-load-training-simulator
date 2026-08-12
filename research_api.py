@@ -1,13 +1,23 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 from typing import Optional
 
-from db import init_db, query_df, execute, now_iso
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+from models import init_db
+from repository import add_event, events_df, participants_df, trials_df
 
 app = FastAPI(
     title="Human Performance Simulation Research API",
-    version="1.0.0",
-    description="Optional API layer for multi-user human-factors research sessions.",
+    version="2.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 init_db()
@@ -22,6 +32,8 @@ class EventIn(BaseModel):
     task_number: Optional[int] = None
     value: Optional[str] = None
     elapsed_ms: Optional[float] = None
+    x_norm: Optional[float] = Field(default=None, ge=0, le=1)
+    y_norm: Optional[float] = Field(default=None, ge=0, le=1)
 
 
 @app.get("/health")
@@ -31,72 +43,30 @@ def health():
 
 @app.get("/participants")
 def participants():
-    df = query_df("""
-        SELECT participant_id, created_at, consented, notes
-        FROM participants
-        ORDER BY created_at DESC
-    """)
-    return df.to_dict(orient="records")
+    return participants_df().to_dict(orient="records")
 
 
 @app.get("/sessions")
-def sessions(limit: int = 100):
-    limit = max(1, min(limit, 1000))
-    df = query_df(f"""
-        SELECT *
-        FROM sessions
-        ORDER BY created_at DESC
-        LIMIT {limit}
-    """)
-    return df.to_dict(orient="records")
+def sessions():
+    return trials_df().to_dict(orient="records")
 
 
 @app.get("/events")
-def events(limit: int = 200):
-    limit = max(1, min(limit, 2000))
-    df = query_df(f"""
-        SELECT *
-        FROM interaction_events
-        ORDER BY created_at DESC
-        LIMIT {limit}
-    """)
-    return df.to_dict(orient="records")
+def events():
+    return events_df().to_dict(orient="records")
 
 
 @app.post("/events")
 def create_event(event: EventIn):
-    execute("""
-        INSERT INTO interaction_events (
-            session_id, participant_id, event_type, target, page,
-            task_number, value, elapsed_ms, created_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        event.session_id,
-        event.participant_id,
-        event.event_type,
-        event.target,
-        event.page,
-        event.task_number,
-        event.value,
-        event.elapsed_ms,
-        now_iso(),
-    ))
+    add_event(**event.model_dump())
     return {"saved": True}
 
 
 @app.get("/analytics/summary")
 def analytics_summary():
-    df = query_df("SELECT * FROM sessions")
+    df = trials_df()
     if df.empty:
-        return {
-            "trials": 0,
-            "participants": 0,
-            "accuracy": None,
-            "avg_response_time": None,
-            "avg_cognitive_load": None,
-        }
-
+        return {"trials": 0, "participants": 0}
     return {
         "trials": int(len(df)),
         "participants": int(df["participant_id"].nunique()),
